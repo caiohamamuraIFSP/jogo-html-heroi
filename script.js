@@ -1,3 +1,4 @@
+
 let div = document.querySelector('img');
 let botPos = 0;
 let leftPos = 0;
@@ -8,31 +9,29 @@ const ACEL = 4;
 const ATRITO = 0.90;
 let velDireita = 0;
 let velCima = 0;
-let keysPressed = [];
+let keysPressed = {
+    ' ': false,
+    'ArrowLeft': false,
+    'ArrowRight': false
+};
 
 
 document.addEventListener('keydown', pressionarTecla);
 document.addEventListener('keyup', soltarTecla);
 
 let loopJogo = () => {
-    if (keysPressed.includes(' '))
-    {
+    if (keysPressed[' ']) {
         velCima = FORCA_PULO;
     }
-    if (keysPressed.includes('ArrowLeft'))
-    {
+    if (keysPressed['ArrowLeft']) {
         velDireita = -ACEL;
     }
-    if (keysPressed.includes('ArrowRight'))
-    {
+    if (keysPressed['ArrowRight']) {
         velDireita = ACEL;
     }
-    
-    if (velDireita < 0) {
-        div.style.transform = 'scaleX(-1)';
-    } else {
-        div.style.transform = '';
-    }
+
+    let transformacoes = '';
+   
 
     if (botPos > 1) {
         div.src = 'hero.png';
@@ -46,26 +45,30 @@ let loopJogo = () => {
     botPos += velCima;
     if (botPos <= 0) {
         botPos = 0;
-        div.style.bottom = botPos + 'px';
     } else {
-        div.style.bottom = botPos + 'px';
         velCima -= GRAVIDADE;
     }
     leftPos += velDireita;
     velDireita = velDireita * ATRITO;
-    div.style.left = leftPos + 'px';
+    transformacoes = `translate(${leftPos}px, ${-botPos}px)`;
+    if (velDireita < 0) {
+        transformacoes += 'scaleX(-1)';
+    }
+    
+    div.style.transform = transformacoes;
     window.requestAnimationFrame(loopJogo);
 };
 loopJogo();
 
 
 function pressionarTecla(event) {
-    console.log(event.key);
-    if (!keysPressed.includes(event.key)) {
-        keysPressed.push(event.key);
+    if (keysPressed[event.key] == false) {
+        keysPressed[event.key] = true;
     }
 }
 
 function soltarTecla(event) {
-    keysPressed.splice(keysPressed.indexOf(event.key), 1);
+    console.log(keysPressed);
+    if (keysPressed[event.key] == true)
+        keysPressed[event.key] = false;
 }

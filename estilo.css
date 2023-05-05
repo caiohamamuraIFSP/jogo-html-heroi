@@ -1,8 +1,17 @@
+body {
+    margin: 0;
+}
+
 img {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 90px;
     height: 90px;
-    
+}
+
+#canvas {
+    position: absolute;
+    width: 100vw;
+    height: 100vw;
 }
